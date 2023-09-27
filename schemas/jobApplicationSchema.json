@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "properties": {
+    "jobId": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "userId": {
+      "type": "integer",
+      "minimum": 1
+    }
+  },
+  "required": ["jobId", "userId"],
+  "additionalProperties": false
+}
