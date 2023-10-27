@@ -9,9 +9,10 @@ const router = new express.Router();
 
 /** POST / { application } => { application }
  *
- * application should be { jobId, userId }
- *
- * Returns { id, jobId, userId, appliedAt }
+ * This route handles the creation of a job application.
+ * It expects the request body to include an object with jobId and userId.
+ * It then validates the request data and creates a job application using the JobApplication model.
+ * Returns a JSON response containing the newly created application.
  */
 
 router.post("/", async function (req, res, next) {
@@ -29,7 +30,9 @@ router.post("/", async function (req, res, next) {
 
 /** GET /:userId => { applications: [ { id, jobId, userId, appliedAt }, ...] }
  *
- * Returns all job applications for the specified user
+ * This route retrieves all job applications for a specified user.
+ * It expects a userId parameter in the URL and uses it to fetch the user's job applications using the JobApplication model.
+ * Returns a JSON response containing the array of job applications associated with the user.
  */
 
 router.get("/:userId", async function (req, res, next) {

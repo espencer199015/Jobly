@@ -16,6 +16,7 @@ class Job {
    * */
 
   static async create({ title, salary, equity, companyHandle }) {
+    // Insert a new job into the database and return the job data
     const result = await db.query(
       `INSERT INTO jobs (title, salary, equity, company_handle)
        VALUES ($1, $2, $3, $4)
@@ -39,6 +40,7 @@ class Job {
 
   static async apply(userId, jobId) {
     try {
+      // Attempt to apply for a job using JobApplication, returns true if successful, false otherwise
       await JobApplication.apply(userId, jobId);
       return true;
     } catch (error) {
@@ -53,6 +55,7 @@ class Job {
    * */
 
   static async findAll() {
+    // Fetch all jobs from the database
     const result = await db.query(
       `SELECT id, title, salary, equity, company_handle AS "companyHandle"
        FROM jobs`
@@ -67,6 +70,7 @@ class Job {
    * */
 
   static async get(id) {
+    // Fetch a specific job by its ID
     const result = await db.query(
       `SELECT id, title, salary, equity, company_handle AS "companyHandle"
        FROM jobs
@@ -94,6 +98,7 @@ class Job {
    * */
 
   static async update(id, data) {
+    // Update job data with the provided fields and return the updated job data
     const { setCols, values } = sqlForPartialUpdate(data, {
       title: "title",
       salary: "salary",
@@ -123,6 +128,7 @@ class Job {
    **/
 
   static async remove(id) {
+    // Delete a job from the database by its ID
     const result = await db.query(
       `DELETE FROM jobs
        WHERE id = $1

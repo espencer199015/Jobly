@@ -16,15 +16,22 @@ const morgan = require("morgan");
 
 const app = express();
 
+// Enable Cross-Origin Resource Sharing (CORS)
 app.use(cors());
+
+// Parse incoming JSON data
 app.use(express.json());
+
+// Enable request logging using Morgan middleware
 app.use(morgan("tiny"));
+
+// Authenticate JSON Web Tokens (JWT) for user authorization
 app.use(authenticateJWT);
 
-app.use("/auth", authRoutes);
-app.use("/companies", companiesRoutes);
-app.use("/users", usersRoutes);
-
+// Mount various route handlers for different parts of the application
+app.use("/auth", authRoutes);         // Authentication routes
+app.use("/companies", companiesRoutes); // Company-related routes
+app.use("/users", usersRoutes);         // User-related routes
 
 /** Handle 404 errors -- this matches everything */
 app.use(function (req, res, next) {

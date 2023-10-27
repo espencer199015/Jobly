@@ -14,7 +14,8 @@ class JobApplication {
    */
 
   static async apply({ jobId, userId }) {
-    // Implement the logic to create a new job application in the database
+    // This function is expected to create a new job application in the database.
+    // It should use the provided data, including jobId and userId, and record when the application was made (appliedAt).
   }
 
   /** Get all job applications for a user.
@@ -23,7 +24,8 @@ class JobApplication {
    */
 
   static async getAllForUser(userId) {
-    // Implement the logic to fetch all job applications for a user from the database
+    // This function should retrieve all job applications for a specific user from the database.
+    // It should return an array of job applications, each containing id, jobId, userId, and appliedAt.
   }
 }
 

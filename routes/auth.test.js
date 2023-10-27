@@ -20,6 +20,7 @@ afterAll(commonAfterAll);
 
 describe("POST /auth/token", function () {
   test("works", async function () {
+    // Test user authentication by sending a POST request to /auth/token
     const resp = await request(app)
         .post("/auth/token")
         .send({
@@ -32,6 +33,7 @@ describe("POST /auth/token", function () {
   });
 
   test("unauth with non-existent user", async function () {
+    // Test unauthenticated access with a non-existent user.
     const resp = await request(app)
         .post("/auth/token")
         .send({
@@ -42,6 +44,7 @@ describe("POST /auth/token", function () {
   });
 
   test("unauth with wrong password", async function () {
+    // Test unauthenticated access with the wrong password.
     const resp = await request(app)
         .post("/auth/token")
         .send({
@@ -52,6 +55,7 @@ describe("POST /auth/token", function () {
   });
 
   test("bad request with missing data", async function () {
+    // Test a bad request with missing data.
     const resp = await request(app)
         .post("/auth/token")
         .send({
@@ -61,6 +65,7 @@ describe("POST /auth/token", function () {
   });
 
   test("bad request with invalid data", async function () {
+    // Test a bad request with invalid data (e.g., non-string username).
     const resp = await request(app)
         .post("/auth/token")
         .send({
@@ -75,6 +80,7 @@ describe("POST /auth/token", function () {
 
 describe("POST /auth/register", function () {
   test("works for anon", async function () {
+    // Test user registration for an anonymous user.
     const resp = await request(app)
         .post("/auth/register")
         .send({
@@ -91,6 +97,7 @@ describe("POST /auth/register", function () {
   });
 
   test("bad request with missing fields", async function () {
+    // Test a bad request with missing required fields.
     const resp = await request(app)
         .post("/auth/register")
         .send({
@@ -100,6 +107,7 @@ describe("POST /auth/register", function () {
   });
 
   test("bad request with invalid data", async function () {
+    // Test a bad request with invalid data (e.g., invalid email format).
     const resp = await request(app)
         .post("/auth/register")
         .send({

@@ -6,19 +6,20 @@ const jsonschema = require("jsonschema");
 const express = require("express");
 
 const { BadRequestError } = require("../expressError");
-const { ensureLoggedIn } = require("../middleware/auth");
+const { ensureLoggedIn, ensureAdmin } = require("../middleware/auth"); // Ensuring user authentication and admin privileges
 const Company = require("../models/company");
 
-const companyNewSchema = require("../schemas/companyNew.json");
-const companyUpdateSchema = require("../schemas/companyUpdate.json");
+const companyNewSchema = require("../schemas/companyNew.json"); // JSON schema for creating a new company
+const companyUpdateSchema = require("../schemas/companyUpdate.json"); // JSON schema for updating a company
 
 const router = new express.Router();
 
 /** POST / { company } =>  { company }
  *
- * company should be { handle, name, description, numEmployees, logoUrl }
+ * This route handles the creation of a new company. It expects the request body to contain
+ * the details of the new company, including handle, name, description, numEmployees, and logoUrl.
  *
- * Returns { handle, name, description, numEmployees, logoUrl }
+ * Returns the newly created company object with fields { handle, name, description, numEmployees, logoUrl }.
  *
  * Authorization required: admin
  */
@@ -34,10 +35,10 @@ router.post("/", ensureAdmin, async function (req, res, next) {
 /** GET /  =>
  *   { companies: [ { handle, name, description, numEmployees, logoUrl }, ...] }
  *
- * Can filter on provided search filters:
+ * This route retrieves a list of all companies. It can filter the results based on provided search filters:
  * - minEmployees
  * - maxEmployees
- * - nameLike (will find case-insensitive, partial matches)
+ * - nameLike (case-insensitive, partial matches)
  *
  * Authorization required: none
  */
@@ -52,8 +53,8 @@ router.get("/", async function (req, res, next) {
 
 /** GET /[handle]  =>  { company }
  *
- *  Company is { handle, name, description, numEmployees, logoUrl, jobs }
- *   where jobs is [{ id, title, salary, equity }, ...]
+ * This route retrieves information about a specific company identified by its handle. The company object includes
+ * fields like handle, name, description, numEmployees, logoUrl, and a list of associated jobs.
  *
  * Authorization required: none
  */
@@ -74,11 +75,10 @@ router.get("/:handle", async function (req, res, next) {
 
 /** PATCH /[handle] { fld1, fld2, ... } => { company }
  *
- * Patches company data.
+ * This route allows the update of company data. It expects a JSON object with fields that can be updated,
+ * such as name, description, numEmployees, and logo_url.
  *
- * fields can be: { name, description, numEmployees, logo_url }
- *
- * Returns { handle, name, description, numEmployees, logo_url }
+ * Returns the updated company object with fields { handle, name, description, numEmployees, logo_url }.
  *
  * Authorization required: admin
  */
@@ -93,7 +93,9 @@ router.patch("/:handle", ensureAdmin, async function (req, res, next) {
 
 /** DELETE /[handle]  =>  { deleted: handle }
  *
- * Authorization: admin
+ * This route allows the deletion of a company identified by its handle.
+ *
+ * Authorization required: admin
  */
 
 router.delete("/:handle", ensureAdmin, async function (req, res, next) {

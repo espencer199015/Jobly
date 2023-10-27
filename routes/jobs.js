@@ -12,9 +12,10 @@ const router = new express.Router();
 
 /** POST / { job } => { job }
  *
- * job should be { title, salary, equity, companyHandle }
- *
- * Returns { title, salary, equity, companyHandle }
+ * This route handles the creation of a new job posting.
+ * It expects the request body to include data such as title, salary, equity, and companyHandle.
+ * It validates the request data against a JSON schema and creates a new job using the Job model.
+ * Returns a JSON response containing the newly created job.
  *
  * Authorization required: admin
  */
@@ -36,7 +37,10 @@ router.post("/", ensureAdmin, async function (req, res, next) {
 
 /** POST /apply/:jobId => { applied: jobId }
  *
- * Apply for a job.
+ * This route allows a user to apply for a job posting.
+ * It expects the job's ID as a parameter in the URL, and the user is assumed to be logged in.
+ * It then attempts to create an application for the specified job.
+ * Returns a JSON response indicating success or failure.
  *
  * Authorization required: logged in user
  */
@@ -44,7 +48,7 @@ router.post("/", ensureAdmin, async function (req, res, next) {
 router.post("/apply/:jobId", ensureLoggedIn, async function (req, res, next) {
   try {
     const jobId = parseInt(req.params.jobId);
-    const userId = req.user.id; // Assuming you have authentication middleware
+    const userId = req.user.id;
 
     const applicationSuccessful = await Job.apply(userId, jobId);
 
@@ -60,8 +64,10 @@ router.post("/apply/:jobId", ensureLoggedIn, async function (req, res, next) {
 
 /** GET / => { jobs: [ { title, salary, equity, companyHandle }, ...] }
  *
- * Can filter on provided search filters:
- * - title (will find case-insensitive, partial matches)
+ * This route retrieves a list of job postings. It allows for optional filtering by title.
+ * If a title filter is provided, it returns job postings matching the title.
+ * If no filter is provided, it returns all job postings.
+ * Returns a JSON response containing the list of job postings.
  *
  * Authorization required: none
  */
@@ -69,7 +75,6 @@ router.post("/apply/:jobId", ensureLoggedIn, async function (req, res, next) {
 router.get("/", async function (req, res, next) {
   try {
     const { title } = req.query;
-
     let jobs;
 
     if (title) {
@@ -86,7 +91,8 @@ router.get("/", async function (req, res, next) {
 
 /** GET /[id]  =>  { job }
  *
- *  Job is { title, salary, equity, companyHandle }
+ * This route retrieves detailed information about a specific job posting using its ID.
+ * Returns a JSON response containing the job details.
  *
  * Authorization required: none
  */
@@ -102,11 +108,10 @@ router.get("/:id", async function (req, res, next) {
 
 /** PATCH /[id] { fld1, fld2, ... } => { job }
  *
- * Patches job data.
- *
- * fields can be: { title, salary, equity }
- *
- * Returns { title, salary, equity, companyHandle }
+ * This route allows the updating of job posting details.
+ * It expects the ID of the job to be updated in the URL and the fields to be updated in the request body.
+ * It validates the request data using a JSON schema and updates the job details using the Job model.
+ * Returns a JSON response containing the updated job details.
  *
  * Authorization required: admin
  */
@@ -128,7 +133,10 @@ router.patch("/:id", ensureAdmin, async function (req, res, next) {
 
 /** DELETE /[id]  =>  { deleted: id }
  *
- * Authorization: admin
+ * This route allows the deletion of a job posting by its ID.
+ * Returns a JSON response indicating that the job has been deleted.
+ *
+ * Authorization required: admin
  */
 
 router.delete("/:id", ensureAdmin, async function (req, res, next) {
